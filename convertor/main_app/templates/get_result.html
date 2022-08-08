@@ -5,7 +5,11 @@
     <title>Результат конвертации</title>
 </head>
 <body>
+{{ img }}
+
 <img src="{{ img.url }}" height=35 width=35>
 <img src="{{ img }}" height=35 width=35>
+<img src="\images\before_convert\img.png" height=35 width=35>
+<a href="{{ img }}" download="{{ img }}"> Download Your File</a>
 </body>
 </html>
