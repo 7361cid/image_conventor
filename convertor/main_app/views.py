@@ -14,5 +14,6 @@ class UploadImg(FormView):
         print(f"here {form}")
         if form.data['format'] and "img" in self.request.FILES.keys():
             img_obj = ImageModel.objects.create(format=form.data['format'], img=self.request.FILES['img'])
+            img_obj.save()
             context['img'] = img_obj.convert()
         return render(self.request, 'get_result.html', context)
