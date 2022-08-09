@@ -1,7 +1,11 @@
 from django.views.generic.edit import FormView
+from rest_framework import mixins, viewsets
+from rest_framework.response import Response
 from django.shortcuts import render
+from http.server import HTTPStatus
 from .forms import ImageForm
 from .models import ImageModel
+from .serializers import ImgSerializer
 
 
 class UploadImg(FormView):
@@ -11,9 +15,24 @@ class UploadImg(FormView):
 
     def form_valid(self, form):
         context = {}
-        print(f"here {form}")
         if form.data['format'] and "img" in self.request.FILES.keys():
             img_obj = ImageModel.objects.create(format=form.data['format'], img=self.request.FILES['img'])
             img_obj.save()
             context['img'] = img_obj.convert()
         return render(self.request, 'get_result.html', context)
+
+
+class UploadImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ImgSerializer
+    queryset = ImageModel.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        return Response({'format': "format"}, status=HTTPStatus.OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = ImgSerializer(data=self.request.data)
+        if serializer.is_valid():
+            print(f"LOG API {serializer}")
+            format = serializer.validated_data['format']
+            return Response({'format': format}, status=HTTPStatus.OK)
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
