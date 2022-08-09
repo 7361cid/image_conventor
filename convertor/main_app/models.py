@@ -12,7 +12,8 @@ class ImageModel(models.Model):
 
     def convert(self):
         img = Image.open(self.img)
-        print(f"LOG {self.format}  {self.img}  ")
+        print(f"LOG {self.format} --- {self.img} --- {self.img.name}  ")
         rgb_img = img.convert('RGB')
-        rgb_img.save(f"static/{str(self.img).split('.')[0]}.{self.format}", self.format)
-        return rgb_img
+        img_name = f"static/{str(self.img).split('.')[0]}.{self.format}"
+        rgb_img.save(img_name, self.format)
+        return img_name
