@@ -20,4 +20,4 @@ class ImageModel(models.Model):
         rgb_img = img.convert('RGB')
         img_name = f"static/{str(self.img).split('.')[0]}.{self.format}"
         rgb_img.save(img_name, self.format)
-        return img_name
+        return img_name, rgb_img.size

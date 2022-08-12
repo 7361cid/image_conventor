@@ -27,12 +27,9 @@ button {
     width: 100%;
 }
 
-.td_sidebar {
-   width: 20%;
-}
 
 .td_content_center {
-   width: 80%;
+   text-align: center;
 }
 
 .container {

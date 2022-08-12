@@ -2,8 +2,10 @@
 
 {% block title %}Результат конвертации{% endblock %}
 
-{% block content %}
-<img src="\{{ img }}" height=35 width=35>
+{% block content_center %}
+<img src="\{{ img }}" height={{ size.1 }} width={{ size.0 }}>
+<br>
 <a href="\{{ img }}" download="\{{ img }}"> Результат конвертации вашего файла </a>
+<a href="\{{ img }}"><img src="/static/images/download.png" alt="Whitesquare logo" height=40 width=40></a>
 {% endblock %}
 

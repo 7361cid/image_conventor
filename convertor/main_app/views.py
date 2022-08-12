@@ -18,7 +18,10 @@ class UploadImg(FormView):
         if form.data['format'] and "img" in self.request.FILES.keys():
             img_obj = ImageModel.objects.create(format=form.data['format'], img=self.request.FILES['img'])
             img_obj.save()
-            context['img'] = img_obj.convert()
+            img_name, size = img_obj.convert()
+            context['img'] = img_name
+            context['size'] = size
+        print(f"Log size {size}")
         return render(self.request, 'get_result.html', context)
 
 
