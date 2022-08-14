@@ -3,7 +3,7 @@ from rest_framework import routers
 from .views import UploadImg, UploadImgAPI
 
 router = routers.DefaultRouter()
-router.register('something', UploadImgAPI, basename='img_load')
+router.register('convertor', UploadImgAPI, basename='img_load')
 
 urlpatterns = [
     path("", UploadImg.as_view(), name="load"),

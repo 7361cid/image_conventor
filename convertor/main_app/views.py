@@ -29,13 +29,19 @@ class UploadImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ImgSerializer
     queryset = ImageModel.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        return Response({'format': "format"}, status=HTTPStatus.OK)
-
     def post(self, request, *args, **kwargs):
         serializer = ImgSerializer(data=self.request.data)
         if serializer.is_valid():
-            print(f"LOG API {serializer}")
             format = serializer.validated_data['format']
-            return Response({'format': format}, status=HTTPStatus.OK)
+            img = serializer.validated_data['img']
+            if format == str(img).split(".")[-1]:
+                return Response("Same format", status=HTTPStatus.BAD_REQUEST)
+            if str(img).split(".")[-1] not in ["bmp", "jpeg", "gif", "png", "ico"]:
+                return Response("Bad file", status=HTTPStatus.BAD_REQUEST)
+            if format not in ["bmp", "jpeg", "gif", "png", "ico"]:
+                return Response("Bad format", status=HTTPStatus.BAD_REQUEST)
+            img_obj = ImageModel.objects.create(format=format, img=img)
+            img_obj.save()
+            img = img_obj.convert(for_api=True)
+            return Response({'img': img}, status=HTTPStatus.OK)
         return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
