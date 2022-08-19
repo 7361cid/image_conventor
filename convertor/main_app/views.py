@@ -21,7 +21,6 @@ class UploadImg(FormView):
             img_name, size = img_obj.convert()
             context['img'] = img_name
             context['size'] = size
-        print(f"Log size {size}")
         return render(self.request, 'get_result.html', context)
 
 

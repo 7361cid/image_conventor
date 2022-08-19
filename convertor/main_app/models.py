@@ -10,7 +10,7 @@ FORMAT_CHOICES = (("png", "png"),
 
 
 class ImageModel(models.Model):
-    format = models.CharField(max_length=9, choices=FORMAT_CHOICES, default="jpeg")
+    format = models.CharField(max_length=5, choices=FORMAT_CHOICES, default="jpeg")
     img = models.ImageField(upload_to="images/before_convert/", )
 
     def convert(self, for_api=False):

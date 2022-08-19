@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "convertor"
+version = "0.1.0"
+description = ""
+authors = ["cidTomsk <61188943+cidTomsk@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.1"
+Pillow = "^9.2.0"
+djangorestframework = "^3.13.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
