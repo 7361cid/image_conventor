@@ -1,8 +1,10 @@
 body {
 	font: 12px Tahoma, sans-serif;
-	background-color: #f8f8f8;
+	background-color: #fff;
 	border-top: 5px solid #7e7e7e;
 	margin: 0;
+	height: 100%;
+    overflow: hidden;
 }
 
 button {
@@ -30,21 +32,18 @@ button {
 
 .td_content_center {
    text-align: center;
+   height: 80%;
 }
 
 .container {
     width: 100vh;
     margin: 0 auto;
-    background: #f0f0f0;
    }
 
 .header {
     font-size: 20px;
     text-align: center;
     padding: 5px;
-    background: #8fa09b;
-    color: #fff;
-    height: 10vh;
+    height: 150px;
     width: 100%;
-
 }

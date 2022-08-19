@@ -10,3 +10,7 @@
 docker-compose build
 docker-compose up
 ```
+При работе без использования docker
+```
+poetry run python manage.py runserver --insecure
+```
