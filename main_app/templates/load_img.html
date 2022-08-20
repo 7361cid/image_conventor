@@ -2,7 +2,7 @@
 
 {% block title %}Результат конвертации{% endblock %}
 
-{% block content %}
+{% block content_center %}
 <form method="post" enctype='multipart/form-data'>
               {% csrf_token %}
               {{ form.as_p }}

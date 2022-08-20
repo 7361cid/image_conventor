@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Результат конвертации{% endblock %}
+
+{% block content_center %}
+  <p><button onclick="window.location.href = '{% url 'change_format'  %}';"> Смена формата </button></p>
+  <p><button onclick="window.location.href = '{% url 'resize'  %}';"> Изменить размер </button></p>
+  <p><button onclick="window.location.href = '{% url 'change_format'  %}';"> Поворот </button></p>
+  <p><button onclick="window.location.href = '{% url 'resize'  %}';"> Вырезать фрагмент </button></p>
+  <p><button onclick="window.location.href = '{% url 'change_format'  %}';"> Отзеркалить </button></p>
+{% endblock %}
