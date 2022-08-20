@@ -11,7 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env: 
-        working-directory: /homework3
+        working-directory: /image_conventor
 
     steps:
     - uses: actions/checkout@v2
@@ -24,4 +24,4 @@ jobs:
     - name: Install Dependencies using Poetry
       run: poetry install
     - name: Test with unit tests
-      run: python manage.py test
+      run: poetry python manage.py test
