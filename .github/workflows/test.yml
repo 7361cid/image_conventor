@@ -24,4 +24,4 @@ jobs:
     - name: Install Dependencies using Poetry
       run: cd convertor; poetry install
     - name: Test with unit tests
-      run: cd convertor; poetry python3 manage.py test
+      run: cd convertor; poetry python3.8 manage.py test
