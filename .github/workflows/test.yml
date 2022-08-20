@@ -24,8 +24,12 @@ jobs:
     - name: Check0
       run: ls
     - name: Change dir
-      run: cd /convertor
+      run: cd convertor
     - name: Check
+      run: ls
+    - name: Change dir2
+      run: cd convertor
+    - name: Check2
       run: ls
     - name: Install Dependencies using Poetry
       run: poetry install
