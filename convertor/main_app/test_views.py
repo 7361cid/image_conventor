@@ -7,7 +7,7 @@ from django.core.files import File
 
 
 class TestUploadImgView(TestCase):
-    test_img = str(Path(__file__).parent) + r"\test_img.png"
+    test_img = str(Path(__file__).parent) + f"{os.path.sep}test_img.png"
 
     def test_view_get(self):
         client = Client()

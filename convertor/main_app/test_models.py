@@ -8,8 +8,8 @@ from .models import ImageModel
 
 
 class TestImageModel(unittest.TestCase):
-    test_img = str(Path(__file__).parent) + r"\test_img.png"
-    test_no_img = str(Path(__file__).parent) + r"\urls.py"
+    test_img = str(Path(__file__).parent) + f"{os.path.sep}test_img.png"
+    test_no_img = str(Path(__file__).parent) + f"{os.path.sep}urls.py"
 
     def test_create_img_object(self):
         with open(self.test_img, "rb") as test_img:
