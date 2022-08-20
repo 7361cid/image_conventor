@@ -11,7 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env: 
-        working-directory: /image_conventor/convertor
+        working-directory: /image_conventor/convertor/
 
     steps:
     - uses: actions/checkout@v2
@@ -26,10 +26,6 @@ jobs:
     - name: Change dir
       run: cd convertor
     - name: Check
-      run: ls
-    - name: Change dir2
-      run: cd convertor
-    - name: Check2
       run: ls
     - name: Install Dependencies using Poetry
       run: poetry install
