@@ -22,6 +22,6 @@ jobs:
     - name: Install Poetry
       run: pip install poetry
     - name: Install Dependencies using Poetry
-      run: cd convertor; dotenv git.env; poetry install
+      run: cd convertor; dotenv; poetry install
     - name: Test with unit tests
       run: cd convertor; poetry run python manage.py test
