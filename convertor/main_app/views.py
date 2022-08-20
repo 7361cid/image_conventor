@@ -16,6 +16,7 @@ class UploadImg(FormView):
     def form_valid(self, form):
         context = {}
         if form.data['format'] and "img" in self.request.FILES.keys():
+            print(f"View LOG")
             img_obj = ImageModel.objects.create(format=form.data['format'], img=self.request.FILES['img'])
             img_obj.save()
             img_name, size = img_obj.convert()
