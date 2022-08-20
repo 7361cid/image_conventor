@@ -21,13 +21,7 @@ jobs:
         python-version: "3.8"
     - name: Install Poetry
       run: pip install poetry
-    - name: Check0
-      run: cd convertor; ls
-    - name: Change dir
-      run: cd convertor
-    - name: Check
-      run: ls
     - name: Install Dependencies using Poetry
-      run: poetry install
+      run: cd convertor; poetry install
     - name: Test with unit tests
-      run: poetry python manage.py test
+      run: cd convertor; poetry python manage.py test
