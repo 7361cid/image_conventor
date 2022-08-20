@@ -22,7 +22,7 @@ jobs:
     - name: Install Poetry
       run: pip install poetry
     - name: Check0
-      run: ls
+      run: cd convertor; ls
     - name: Change dir
       run: cd convertor
     - name: Check
