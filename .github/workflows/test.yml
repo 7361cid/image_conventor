@@ -21,6 +21,8 @@ jobs:
         python-version: "3.8"
     - name: Install Poetry
       run: pip install poetry
+    - name: Check
+      run: ls
     - name: Install Dependencies using Poetry
       run: poetry install
     - name: Test with unit tests
