@@ -47,7 +47,7 @@ class ImageModel(models.Model):
 
     def rotate(self, for_api=False):
         img = Image.open(self.img)
-        if not isinstance(self.degree, int):
+        if not str(self.degree).isdigit:
             raise ValueError("degree")
         img = img.rotate(int(self.degree))
         img_name = f"static/{str(self.img)}"
@@ -59,7 +59,12 @@ class ImageModel(models.Model):
 
     def crop(self, for_api=False):
         img = Image.open(self.img)
-        crop_coordinates = [int(i) for i in self.crop_coordinates.split(",")]
+        try:
+            crop_coordinates = [int(i) for i in self.crop_coordinates.split(",")]
+        except:
+            raise ValueError("crop_coordinates")
+        if crop_coordinates[0] > img.size[0] or crop_coordinates[1] > img.size[1] or crop_coordinates[2] > img.size[0] or crop_coordinates[3] > img.size[1]:
+            raise ValueError("crop_coordinates")
         img = img.crop(crop_coordinates)
         img_name = f"static/{str(self.img)}"
         img.save(img_name)

@@ -3,7 +3,7 @@ import io
 import base64
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from .forms import ChangeFormatForm
+from .forms import ChangeFormatForm, ResizeImgForm, RotateImgForm, CropImgForm, MirrorImgForm
 
 
 class TestImageForm(unittest.TestCase):
@@ -57,27 +57,98 @@ class TestImageForm(unittest.TestCase):
         charset='utf-8',
     )
 
-    def test_fill_form(self):
+    def test_fill_form_change_format(self):
         data = {"format": "jpeg"}
         files = {"img": self.img}
         form = ChangeFormatForm(data=data, files=files)
         self.assertTrue(form.is_valid())
 
-    def test_fill_form_without_img(self):
+    def test_fill_form_change_format_without_img(self):
         data = {"format": "jpeg"}
         form = ChangeFormatForm(data=data)
         self.assertFalse(form.is_valid())
 
-    def test_fill_form_without_format(self):
+    def test_fill_form_change_format_without_format(self):
         files = {"img": self.img}
         form = ChangeFormatForm(files=files)
         self.assertFalse(form.is_valid())
 
-    def test_fill_form_same_format(self):
+    def test_fill_form__change_format_same_format(self):
         data = {"format": "png"}
         files = {"img": self.img}
         form = ChangeFormatForm(data=data, files=files)
         self.assertFalse(form.is_valid())
+
+    def test_fill_form_resize(self):
+        data = {"new_size": "100, 100"}
+        files = {"img": self.img}
+        form = ResizeImgForm(data=data, files=files)
+        self.assertTrue(form.is_valid())
+
+    def test_fill_form_resize_without_img(self):
+        data = {"new_size": "100, 100"}
+        form = ResizeImgForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_resize_without_new_size(self):
+        files = {"img": self.img}
+        form = ResizeImgForm(files=files)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_resize_bad_new_size(self):
+        data = {"new_size": "bad"}
+        files = {"img": self.img}
+        form = ResizeImgForm(data=data, files=files)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_rotate(self):
+        data = {"degree": 45}
+        files = {"img": self.img}
+        form = RotateImgForm(data=data, files=files)
+        self.assertTrue(form.is_valid())
+
+    def test_fill_form_rotate_without_img(self):
+        data = {"degree": 45}
+        form = RotateImgForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_rotate_without_degree(self):
+        files = {"img": self.img}
+        form = RotateImgForm(files=files)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_resize_bad_degree(self):
+        data = {"degree": "bad"}
+        files = {"img": self.img}
+        form = ResizeImgForm(data=data, files=files)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_crop(self):
+        data = {"crop_coordinates": "100, 100, 200, 200"}
+        files = {"img": self.img}
+        form = CropImgForm(data=data, files=files)
+        self.assertTrue(form.is_valid())
+
+    def test_fill_form_crop_without_img(self):
+        data = {"crop_coordinates": "100, 100, 200, 200"}
+        form = CropImgForm(data=data)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_crop_without_coordinates(self):
+        files = {"img": self.img}
+        form = CropImgForm(files=files)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_crop_bad_coordinates(self):
+        data = {"crop_coordinates": "bad"}
+        files = {"img": self.img}
+        form = CropImgForm(data=data, files=files)
+        self.assertFalse(form.is_valid())
+
+    def test_fill_form_mirror(self):
+        files = {"img": self.img}
+        form = MirrorImgForm(files=files)
+        self.assertTrue(form.is_valid())
 
 
 if __name__ == "__main__":
