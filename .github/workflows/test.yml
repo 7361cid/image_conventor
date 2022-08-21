@@ -23,5 +23,9 @@ jobs:
       run: pip install poetry
     - name: Install Dependencies using Poetry
       run:  poetry install
+    - name: makemigrations
+      run:  export SECRET_KEY=django-insecure; poetry run python manage.py makemigrations
+    - name: migrate
+      run:  poetry run python manage.py migrate
     - name: Test with unit tests
-      run: export SECRET_KEY=django-insecure; poetry run python manage.py test
+      run:  poetry run python manage.py test
