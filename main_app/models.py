@@ -1,4 +1,3 @@
-import os
 import PIL
 
 from PIL import Image
@@ -14,7 +13,7 @@ FORMAT_CHOICES = (("png", "png"),
 
 class ImageModel(models.Model):
     format = models.CharField(max_length=5, choices=FORMAT_CHOICES, default="jpeg", blank=True)
-    img = models.ImageField(upload_to="images/before_convert/")
+    img = models.ImageField(upload_to="images/")
     new_size = models.CharField(max_length=30, blank=True)
     degree = models.IntegerField(default=0, blank=True)
     crop_coordinates = models.CharField(max_length=50, blank=True)
