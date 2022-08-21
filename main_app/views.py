@@ -95,12 +95,15 @@ class MirrorImg(FormView):
 
 class ChangeFormatImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ImgSerializer
-    queryset = ImageModel.objects.all()
+    queryset = ImageModel.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = ImgSerializer(data=self.request.data)
         if serializer.is_valid():
-            format = serializer.validated_data['format']
+            try:
+                format = serializer.validated_data['format']
+            except KeyError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
             img = serializer.validated_data['img']
             if format == str(img).split(".")[-1]:
                 return Response("Same format", status=HTTPStatus.BAD_REQUEST)
@@ -110,6 +113,90 @@ class ChangeFormatImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
                 return Response("Bad format", status=HTTPStatus.BAD_REQUEST)
             img_obj = ImageModel.objects.create(format=format, img=img)
             img_obj.save()
-            img = img_obj.convert(for_api=True)
-            return Response({'img': img}, status=HTTPStatus.OK)
+            try:
+                img = img_obj.convert(for_api=True)
+            except ValueError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            return Response({'img_url': img}, status=HTTPStatus.OK)
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
+
+
+class ResizeImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ImgSerializer
+    queryset = ImageModel.objects.none()
+
+    def post(self, request, *args, **kwargs):
+        serializer = ImgSerializer(data=self.request.data)
+        if serializer.is_valid():
+            try:
+                new_size = serializer.validated_data['new_size']
+            except KeyError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            img = serializer.validated_data['img']
+            img_obj = ImageModel.objects.create(new_size=new_size, img=img)
+            img_obj.save()
+            try:
+                img = img_obj.resize(for_api=True)
+            except ValueError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            return Response({'img_url': img}, status=HTTPStatus.OK)
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
+
+
+class RotateImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ImgSerializer
+    queryset = ImageModel.objects.none()
+
+    def post(self, request, *args, **kwargs):
+        serializer = ImgSerializer(data=self.request.data)
+        if serializer.is_valid():
+            try:
+                degree = serializer.validated_data['degree']
+            except KeyError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            img = serializer.validated_data['img']
+            img_obj = ImageModel.objects.create(degree=degree, img=img)
+            img_obj.save()
+            try:
+                img = img_obj.rotate(for_api=True)
+            except ValueError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            return Response({'img_url': img}, status=HTTPStatus.OK)
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
+
+
+class CropImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ImgSerializer
+    queryset = ImageModel.objects.none()
+
+    def post(self, request, *args, **kwargs):
+        serializer = ImgSerializer(data=self.request.data)
+        if serializer.is_valid():
+            try:
+                crop_coordinates = serializer.validated_data['crop_coordinates']
+            except KeyError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            img = serializer.validated_data['img']
+            img_obj = ImageModel.objects.create(crop_coordinates=crop_coordinates, img=img)
+            img_obj.save()
+            try:
+                img = img_obj.crop(for_api=True)
+            except ValueError as err:
+                return Response(str(err), status=HTTPStatus.BAD_REQUEST)
+            return Response({'img_url': img}, status=HTTPStatus.OK)
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
+
+
+class MirrorImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ImgSerializer
+    queryset = ImageModel.objects.none()
+
+    def post(self, request, *args, **kwargs):
+        serializer = ImgSerializer(data=self.request.data)
+        if serializer.is_valid():
+            img = serializer.validated_data['img']
+            img_obj = ImageModel.objects.create(img=img)
+            img_obj.save()
+            img = img_obj.mirror(for_api=True)
+            return Response({'img_url': img}, status=HTTPStatus.OK)
         return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)

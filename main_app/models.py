@@ -1,3 +1,4 @@
+import os
 import PIL
 
 from PIL import Image
@@ -26,37 +27,53 @@ class ImageModel(models.Model):
             raise ValueError("bad format")
         rgb_img.save(img_name, self.format)
         if for_api:
-            with open(img_name, 'rb') as f:
-                return str(f.read())
+            return img_name
         else:
             return img_name, rgb_img.size
 
-    def resize(self):
+    def resize(self, for_api=False):
         img = Image.open(self.img)
-        new_size = [int(i) for i in self.new_size.split(",")]
+        try:
+            new_size = [int(i) for i in self.new_size.split(",")]
+        except:
+            raise ValueError("new_size")
         img = img.resize(new_size)
         img_name = f"static/{str(self.img)}"
         img.save(img_name)
-        return img_name, img.size
+        if for_api:
+            return img_name
+        else:
+            return img_name, img.size
 
-    def rotate(self):
+    def rotate(self, for_api=False):
         img = Image.open(self.img)
+        if not isinstance(self.degree, int):
+            raise ValueError("degree")
         img = img.rotate(int(self.degree))
         img_name = f"static/{str(self.img)}"
         img.save(img_name)
-        return img_name, img.size
+        if for_api:
+            return img_name
+        else:
+            return img_name, img.size
 
-    def crop(self):
+    def crop(self, for_api=False):
         img = Image.open(self.img)
         crop_coordinates = [int(i) for i in self.crop_coordinates.split(",")]
         img = img.crop(crop_coordinates)
         img_name = f"static/{str(self.img)}"
         img.save(img_name)
-        return img_name, img.size
+        if for_api:
+            return img_name
+        else:
+            return img_name, img.size
 
-    def mirror(self):
+    def mirror(self, for_api=False):
         img = Image.open(self.img)
         img = img.transpose(PIL.Image.FLIP_LEFT_RIGHT)
         img_name = f"static/{str(self.img)}"
         img.save(img_name)
-        return img_name, img.size
+        if for_api:
+            return img_name
+        else:
+            return img_name, img.size
