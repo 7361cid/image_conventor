@@ -2,9 +2,8 @@ import unittest
 import io
 import base64
 
-from pathlib import Path
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from .forms import ImageForm
+from .forms import ChangeFormatForm
 
 
 class TestImageForm(unittest.TestCase):
@@ -61,23 +60,23 @@ class TestImageForm(unittest.TestCase):
     def test_fill_form(self):
         data = {"format": "jpeg"}
         files = {"img": self.img}
-        form = ImageForm(data=data, files=files)
+        form = ChangeFormatForm(data=data, files=files)
         self.assertTrue(form.is_valid())
 
     def test_fill_form_without_img(self):
         data = {"format": "jpeg"}
-        form = ImageForm(data=data)
+        form = ChangeFormatForm(data=data)
         self.assertFalse(form.is_valid())
 
     def test_fill_form_without_format(self):
         files = {"img": self.img}
-        form = ImageForm(files=files)
+        form = ChangeFormatForm(files=files)
         self.assertFalse(form.is_valid())
 
     def test_fill_form_same_format(self):
         data = {"format": "png"}
         files = {"img": self.img}
-        form = ImageForm(data=data, files=files)
+        form = ChangeFormatForm(data=data, files=files)
         self.assertFalse(form.is_valid())
 
 

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from http.server import HTTPStatus
-from .forms import ChangeFormatForm, ResizeImgForm
+from .forms import ChangeFormatForm, ResizeImgForm, RotateImgForm, CropImgForm, MirrorImgForm
 from .models import ImageModel
 from .serializers import ImgSerializer
 
@@ -21,7 +21,6 @@ class ChangeFormatImg(FormView):
     def form_valid(self, form):
         context = {}
         if form.data['format'] and "img" in self.request.FILES.keys():
-            print(f"View LOG")
             img_obj = ImageModel.objects.create(format=form.data['format'], img=self.request.FILES['img'])
             img_obj.save()
             img_name, size = img_obj.convert()
@@ -38,10 +37,57 @@ class ResizeImg(FormView):
     def form_valid(self, form):
         context = {}
         if form.data['new_size'] and "img" in self.request.FILES.keys():
-            print(f"View LOG")
             img_obj = ImageModel.objects.create(new_size=form.data['new_size'], img=self.request.FILES['img'])
             img_obj.save()
             img_name, size = img_obj.resize()
+            context['img'] = img_name
+            context['size'] = size
+        return render(self.request, 'get_result.html', context)
+
+
+class RotateImg(FormView):
+    template_name = 'load_img.html'
+    form_class = RotateImgForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        context = {}
+        if form.data['degree'] and "img" in self.request.FILES.keys():
+            img_obj = ImageModel.objects.create(degree=form.data['degree'], img=self.request.FILES['img'])
+            img_obj.save()
+            img_name, size = img_obj.rotate()
+            context['img'] = img_name
+            context['size'] = size
+        return render(self.request, 'get_result.html', context)
+
+
+class CropImg(FormView):
+    template_name = 'load_img.html'
+    form_class = CropImgForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        context = {}
+        if form.data['crop_coordinates'] and "img" in self.request.FILES.keys():
+            img_obj = ImageModel.objects.create(crop_coordinates=form.data['crop_coordinates'], img=self.request.FILES['img'])
+            img_obj.save()
+            img_name, size = img_obj.crop()
+            context['img'] = img_name
+            context['size'] = size
+        return render(self.request, 'get_result.html', context)
+
+
+class MirrorImg(FormView):
+    template_name = 'load_img.html'
+    form_class = MirrorImgForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        context = {}
+        if "img" in self.request.FILES.keys():
+            img_obj = ImageModel.objects.create(img=self.request.FILES['img'])
+            img_obj.save()
+            img_name, size = img_obj.mirror()
             context['img'] = img_name
             context['size'] = size
         return render(self.request, 'get_result.html', context)
