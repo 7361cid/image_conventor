@@ -5,8 +5,15 @@ from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from http.server import HTTPStatus
 from .forms import ChangeFormatForm, ResizeImgForm, RotateImgForm, CropImgForm, MirrorImgForm
-from .models import ImageModel
+from .models import ImageModel, FORMAT_CHOICES
 from .serializers import ImgSerializer
+
+
+def validate_format(format):
+    if format in [f[0] for f in FORMAT_CHOICES]:
+        return True
+    else:
+        return False
 
 
 class MainView(TemplateView):
@@ -107,9 +114,9 @@ class ChangeFormatImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
             img = serializer.validated_data['img']
             if format == str(img).split(".")[-1]:
                 return Response("Same format", status=HTTPStatus.BAD_REQUEST)
-            if str(img).split(".")[-1] not in ["bmp", "jpeg", "gif", "png", "ico"]:
+            if not validate_format(str(img).split(".")[-1]):
                 return Response("Bad file", status=HTTPStatus.BAD_REQUEST)
-            if format not in ["bmp", "jpeg", "gif", "png", "ico"]:
+            if not validate_format(format):
                 return Response("Bad format", status=HTTPStatus.BAD_REQUEST)
             img_obj = ImageModel.objects.create(format=format, img=img)
             img_obj.save()
@@ -133,6 +140,8 @@ class ResizeImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
             except KeyError as err:
                 return Response(str(err), status=HTTPStatus.BAD_REQUEST)
             img = serializer.validated_data['img']
+            if not validate_format(str(img).split(".")[-1]):
+                return Response("Bad file", status=HTTPStatus.BAD_REQUEST)
             img_obj = ImageModel.objects.create(new_size=new_size, img=img)
             img_obj.save()
             try:
@@ -155,6 +164,8 @@ class RotateImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
             except KeyError as err:
                 return Response(str(err), status=HTTPStatus.BAD_REQUEST)
             img = serializer.validated_data['img']
+            if not validate_format(str(img).split(".")[-1]):
+                return Response("Bad file", status=HTTPStatus.BAD_REQUEST)
             img_obj = ImageModel.objects.create(degree=degree, img=img)
             img_obj.save()
             try:
@@ -177,6 +188,8 @@ class CropImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
             except KeyError as err:
                 return Response(str(err), status=HTTPStatus.BAD_REQUEST)
             img = serializer.validated_data['img']
+            if not validate_format(str(img).split(".")[-1]):
+                return Response("Bad file", status=HTTPStatus.BAD_REQUEST)
             img_obj = ImageModel.objects.create(crop_coordinates=crop_coordinates, img=img)
             img_obj.save()
             try:
@@ -195,6 +208,8 @@ class MirrorImgAPI(mixins.ListModelMixin, viewsets.GenericViewSet):
         serializer = ImgSerializer(data=self.request.data)
         if serializer.is_valid():
             img = serializer.validated_data['img']
+            if not validate_format(str(img).split(".")[-1]):
+                return Response("Bad file", status=HTTPStatus.BAD_REQUEST)
             img_obj = ImageModel.objects.create(img=img)
             img_obj.save()
             img = img_obj.mirror(for_api=True)
